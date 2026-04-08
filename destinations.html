@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Destinations — Explore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--sand:#F5EDD6;--earth:#C8A96E;--rust:#C4522A;--forest:#2D4A3E;--night:#0F1A14;--gold:#D4A843;--cream:#FAF6EE;--mist:#E8EDE9;--text-dark:#1A1A1A;--text-muted:#6B7280;--transition:all 0.35s cubic-bezier(0.4,0,0.2,1)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(15,26,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,168,67,0.15);transition:var(--transition)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;font-style:italic;color:var(--gold);text-decoration:none}
+    .nav-links{display:flex;gap:2.5rem;list-style:none}
+    .nav-links a{color:var(--sand);text-decoration:none;font-size:0.9rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;opacity:0.8;transition:var(--transition)}
+    .nav-links a:hover,.nav-links a.active{opacity:1;color:var(--gold)}
+    .nav-cta{background:var(--rust);color:#fff!important;padding:0.55rem 1.4rem;border-radius:2px;opacity:1!important}
+    .nav-cta:hover{background:var(--gold)!important;color:var(--night)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--sand)}
+    .btn{display:inline-block;padding:0.9rem 2.2rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;border-radius:2px;transition:var(--transition)}
+    .btn-primary{background:var(--rust);color:#fff}
+    .btn-primary:hover{background:var(--gold);color:var(--night);transform:translateY(-2px)}
+    .btn-dark{background:var(--forest);color:var(--sand)}
+    .btn-dark:hover{background:var(--night)}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+    .section-eyebrow{font-size:0.75rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--rust);margin-bottom:0.75rem}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;color:var(--night)}
+    .section-title em{font-style:italic;color:var(--earth)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+    /* HERO */
+    .dest-hero{position:relative;min-height:55vh;display:flex;align-items:flex-end;padding-bottom:5rem;overflow:hidden}
+    .dest-hero-bg{position:absolute;inset:0}
+    .dest-hero-bg img{width:100%;height:100%;object-fit:cover}
+    .dest-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,26,20,0.95) 0%,rgba(15,26,20,0.4) 70%)}
+    .dest-hero-content{position:relative;z-index:2;padding:0 4rem;animation:fadeUp 0.7s ease both}
+    .dest-hero-content .section-title{margin-bottom:2rem}
+    .dest-search{display:flex;gap:0.8rem;max-width:560px}
+    .dest-search input{flex:1;padding:0.9rem 1.4rem;border:none;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:1rem;outline:none;background:rgba(255,255,255,0.95)}
+
+    /* REGIONS */
+    .regions-section{padding:4rem 0 6rem}
+    .region-filters{display:flex;gap:0.6rem;flex-wrap:wrap;margin-bottom:3rem}
+    .dest-filter-btn{padding:0.6rem 1.2rem;border:1.5px solid #e2e8f0;border-radius:50px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:0.88rem;font-weight:500;color:var(--text-muted);background:#fff;transition:var(--transition)}
+    .dest-filter-btn:hover,.dest-filter-btn.active{background:var(--forest);border-color:var(--forest);color:var(--sand)}
+
+    /* DESTINATIONS GRID */
+    .destinations-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+    .destination-item{background:#fff;border-radius:4px;overflow:hidden;box-shadow:0 2px 20px rgba(0,0,0,0.06);transition:var(--transition)}
+    .destination-item:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.12)}
+    .dest-item-img{position:relative;height:230px;overflow:hidden}
+    .dest-item-img img{width:100%;height:100%;object-fit:cover;transition:transform 0.5s ease}
+    .destination-item:hover .dest-item-img img{transform:scale(1.05)}
+    .dest-item-badges{position:absolute;top:1rem;left:1rem;right:1rem;display:flex;justify-content:space-between}
+    .badge-region{background:var(--forest);color:var(--sand);font-size:0.7rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;padding:0.3rem 0.8rem;border-radius:2px}
+    .badge-rating{background:rgba(15,26,20,0.8);color:var(--gold);font-size:0.8rem;font-weight:600;padding:0.3rem 0.7rem;border-radius:2px}
+    .dest-item-body{padding:1.5rem}
+    .dest-item-body h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:0.5rem;color:var(--night)}
+    .dest-item-body>p{font-size:0.9rem;color:var(--text-muted);line-height:1.6;margin-bottom:0.5rem}
+    .dest-item-meta{display:flex;gap:0.8rem;flex-wrap:wrap;font-size:0.78rem;color:var(--text-muted);margin-top:0.8rem}
+    .dest-item-meta span{background:var(--mist);padding:0.25rem 0.6rem;border-radius:2px}
+
+    /* CTA */
+    .bucket-cta{background:var(--sand);padding:5rem 0;text-align:center}
+    .bucket-cta p{color:var(--text-muted);margin:1rem 0 2rem}
+
+    /* FOOTER */
+    footer{background:var(--night);color:var(--sand);padding:4rem}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-brand p{opacity:0.6;font-size:0.9rem;line-height:1.7;max-width:260px;margin-top:0.8rem}
+    .footer-col h4{font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+    .footer-col ul{list-style:none}
+    .footer-col ul li{margin-bottom:0.6rem}
+    .footer-col ul li a{color:var(--sand);text-decoration:none;opacity:0.6;font-size:0.9rem;transition:var(--transition)}
+    .footer-col ul li a:hover{opacity:1;color:var(--earth)}
+    .footer-bottom{border-top:1px solid rgba(245,237,214,0.1);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;opacity:0.5;font-size:0.85rem}
+
+    @media(max-width:900px){
+      nav{padding:1rem 1.5rem}
+      .nav-links{display:none;position:fixed;top:65px;left:0;right:0;background:var(--night);flex-direction:column;padding:2rem;gap:1.5rem}
+      .nav-links.open{display:flex}
+      .hamburger{display:flex}
+      .destinations-grid{grid-template-columns:1fr 1fr}
+      .dest-hero-content{padding:0 1.5rem}
+      .dest-search{flex-direction:column}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      footer{padding:2rem}
+    }
+    @media(max-width:600px){.destinations-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo"><em>Explore</em></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="destinations.html" class="active">Destinations</a></li>
+      <li><a href="posts.html">Stories</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="login.html" class="nav-cta">Sign In</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <section class="dest-hero">
+    <div class="dest-hero-bg"><img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=1600&q=80" alt="Destinations" /><div class="dest-hero-overlay"></div></div>
+    <div class="dest-hero-content">
+      <p class="section-eyebrow" style="color:var(--gold)">120+ Destinations</p>
+      <h1 class="section-title" style="color:#fff">Where Will You <em>Go Next?</em></h1>
+      <div class="dest-search">
+        <input type="text" id="destSearch" placeholder="Search destinations, countries, experiences…" />
+        <button class="btn btn-primary">Search</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="regions-section">
+    <div class="container">
+      <div class="region-filters">
+        <button class="dest-filter-btn active" data-region="all">🌍 All Regions</button>
+        <button class="dest-filter-btn" data-region="asia">🏯 Asia</button>
+        <button class="dest-filter-btn" data-region="europe">🏰 Europe</button>
+        <button class="dest-filter-btn" data-region="americas">🌎 Americas</button>
+        <button class="dest-filter-btn" data-region="africa">🌅 Africa</button>
+        <button class="dest-filter-btn" data-region="oceania">🦘 Oceania</button>
+      </div>
+      <div class="destinations-grid" id="destinationsGrid">
+        <div class="destination-item" data-region="europe">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1539037116277-4db20889f2d4?w=600&q=80" alt="Santorini" /><div class="dest-item-badges"><span class="badge-region">Europe</span><span class="badge-rating">⭐ 4.9</span></div></div>
+          <div class="dest-item-body"><h3>Santorini, Greece</h3><p>Cliffside villages, volcanic beaches, the world's most dramatic sunsets.</p><div class="dest-item-meta"><span>💰 Mid-range</span><span>☀️ Apr–Oct</span><span>📖 38 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+        <div class="destination-item" data-region="asia">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=600&q=80" alt="Bali" /><div class="dest-item-badges"><span class="badge-region">Asia</span><span class="badge-rating">⭐ 4.8</span></div></div>
+          <div class="dest-item-body"><h3>Bali, Indonesia</h3><p>Sacred temples, emerald rice terraces, vibrant surf culture.</p><div class="dest-item-meta"><span>💚 Budget</span><span>☀️ Year-round</span><span>📖 62 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+        <div class="destination-item" data-region="americas">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=600&q=80" alt="Patagonia" /><div class="dest-item-badges"><span class="badge-region">Americas</span><span class="badge-rating">⭐ 4.9</span></div></div>
+          <div class="dest-item-body"><h3>Patagonia, Argentina</h3><p>Glaciers, granite peaks, and wilderness that stretches to the end of the world.</p><div class="dest-item-meta"><span>💛 Mid-range</span><span>❄️ Nov–Mar</span><span>📖 24 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+        <div class="destination-item" data-region="asia">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=600&q=80" alt="Tokyo" /><div class="dest-item-badges"><span class="badge-region">Asia</span><span class="badge-rating">⭐ 4.9</span></div></div>
+          <div class="dest-item-body"><h3>Tokyo, Japan</h3><p>Neon-lit arcades, ancient shrines, the world's best ramen and infinite layers.</p><div class="dest-item-meta"><span>💛 Mid-range</span><span>🌸 Mar–May</span><span>📖 89 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+        <div class="destination-item" data-region="africa">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1547471080-7cc2caa01a7e?w=600&q=80" alt="Morocco" /><div class="dest-item-badges"><span class="badge-region">Africa</span><span class="badge-rating">⭐ 4.7</span></div></div>
+          <div class="dest-item-body"><h3>Marrakech, Morocco</h3><p>Labyrinthine medinas, spice souks, ornate riads, and Sahara at the doorstep.</p><div class="dest-item-meta"><span>💚 Budget</span><span>🌿 Mar–May</span><span>📖 31 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+        <div class="destination-item" data-region="oceania">
+          <div class="dest-item-img"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80" alt="New Zealand" /><div class="dest-item-badges"><span class="badge-region">Oceania</span><span class="badge-rating">⭐ 5.0</span></div></div>
+          <div class="dest-item-body"><h3>South Island, New Zealand</h3><p>Fiords, alpine lakes, glaciers, and Middle Earth — all in one island.</p><div class="dest-item-meta"><span>💎 Luxury</span><span>🌊 Nov–Feb</span><span>📖 18 stories</span></div><a href="posts.html" class="btn btn-dark" style="font-size:0.8rem;padding:0.6rem 1.2rem;margin-top:1rem;display:inline-block">Read Guides →</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bucket-cta">
+    <div class="container">
+      <p class="section-eyebrow">Don't See Your Dream Destination?</p>
+      <h2 class="section-title">We're Always <em>Adding More</em></h2>
+      <p>Request a destination or be the first to write about it.</p>
+      <a href="post-editor.html" class="btn btn-primary">Write the First Guide →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="nav-logo"><em>Explore</em></a><p>Your guide to the world's most extraordinary places.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a href="index.html">Home</a></li><li><a href="destinations.html">Destinations</a></li><li><a href="posts.html">Stories</a></li><li><a href="about.html">About</a></li></ul></div>
+      <div class="footer-col"><h4>Account</h4><ul><li><a href="login.html">Sign In</a></li><li><a href="signup.html">Create Account</a></li><li><a href="post-editor.html">Write a Story</a></li></ul></div>
+      <div class="footer-col"><h4>Regions</h4><ul><li><a href="#">Asia</a></li><li><a href="#">Europe</a></li><li><a href="#">Americas</a></li><li><a href="#">Africa</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Explore. All rights reserved.</span><span>Made with ❤️ for wanderers</span></div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    if(hamburger) hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').style.background = window.scrollY>60?'rgba(15,26,20,0.98)':'rgba(15,26,20,0.92)';
+    });
+    document.querySelectorAll('.dest-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.dest-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const region = btn.dataset.region;
+        document.querySelectorAll('.destination-item').forEach(item => {
+          item.style.display = (region==='all' || item.dataset.region===region) ? '' : 'none';
+        });
+      });
+    });
+    document.getElementById('destSearch').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('.destination-item').forEach(item => {
+        item.style.display = item.textContent.toLowerCase().includes(q) ? '' : 'none';
+      });
+    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)'} });
+    },{threshold:0.1});
+    document.querySelectorAll('.destination-item').forEach(el => {
+      el.style.opacity='0';el.style.transform='translateY(20px)';el.style.transition='opacity 0.5s ease,transform 0.5s ease';observer.observe(el);
+    });
+  </script>
+</body>
+</html>

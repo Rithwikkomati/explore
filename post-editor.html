@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Write a Story — Explore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root{--sand:#F5EDD6;--earth:#C8A96E;--rust:#C4522A;--forest:#2D4A3E;--night:#0F1A14;--gold:#D4A843;--cream:#FAF6EE;--text-dark:#1A1A1A;--text-muted:#6B7280;--transition:all 0.35s cubic-bezier(0.4,0,0.2,1)}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;font-style:italic;color:var(--gold);text-decoration:none}
+    .btn{display:inline-block;padding:0.6rem 1.4rem;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;border-radius:2px;transition:var(--transition)}
+    .btn-primary{background:var(--rust);color:#fff}
+    .btn-primary:hover{background:var(--gold);color:var(--night)}
+    .btn-secondary{background:transparent;color:var(--sand);border:1px solid rgba(245,237,214,0.4)}
+    .btn-secondary:hover{border-color:var(--gold);color:var(--gold)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* NAV */
+    .editor-nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;background:rgba(15,26,20,0.95);backdrop-filter:blur(12px)}
+    .editor-nav-right{display:flex;gap:0.8rem}
+
+    /* LAYOUT */
+    .editor-layout{display:grid;grid-template-columns:1fr 300px;min-height:calc(100vh - 65px);max-width:1300px;margin:0 auto;padding:2rem 1.5rem 4rem;gap:2rem;align-items:start}
+
+    /* COVER */
+    .editor-cover{width:100%;height:300px;background:#f0ece3;border-radius:4px;overflow:hidden;position:relative;cursor:pointer;margin-bottom:2rem;border:2px dashed var(--earth);transition:var(--transition);display:flex;align-items:center;justify-content:center}
+    .editor-cover:hover{border-color:var(--rust);background:#ede8de}
+    .cover-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.8rem;color:var(--text-muted)}
+    .cover-placeholder span{font-size:3rem}
+    .cover-placeholder p{font-size:0.95rem}
+    #coverInput{display:none}
+    #coverPreview{width:100%;height:100%;object-fit:cover;display:none}
+
+    /* BODY */
+    .editor-body{padding:0 0.5rem}
+    .editor-tags-row{display:flex;gap:1rem;margin-bottom:1.5rem}
+    .editor-tags-row select,.editor-tags-row input{padding:0.6rem 1rem;border:1.5px solid #e2e8f0;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;background:#fff;transition:var(--transition)}
+    .editor-tags-row select:focus,.editor-tags-row input:focus{border-color:var(--earth)}
+    .editor-tags-row input{flex:1}
+    .title-input{width:100%;border:none;outline:none;font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;color:var(--night);background:transparent;display:block;margin-bottom:0.8rem;line-height:1.2}
+    .title-input::placeholder{color:#ccc}
+    .subtitle-input{width:100%;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:1.05rem;color:var(--text-muted);background:transparent;display:block;margin-bottom:1.5rem;border-bottom:1px solid #e2e8f0;padding-bottom:1.5rem}
+    .subtitle-input::placeholder{color:#ccc}
+
+    /* TOOLBAR */
+    .editor-toolbar{display:flex;align-items:center;gap:0.3rem;background:#f8f4ed;border-radius:2px;padding:0.5rem 0.8rem;margin-bottom:1.2rem;flex-wrap:wrap}
+    .tool-btn{padding:0.35rem 0.7rem;border:none;background:transparent;border-radius:3px;cursor:pointer;font-size:0.9rem;color:var(--text-dark);transition:var(--transition);font-family:'DM Sans',sans-serif}
+    .tool-btn:hover{background:rgba(200,169,110,0.2);color:var(--forest)}
+    .tool-sep{width:1px;height:20px;background:#e2e8f0;margin:0 0.2rem}
+
+    /* CONTENT */
+    .editor-content{min-height:400px;outline:none;font-size:1.05rem;line-height:1.9;color:var(--text-dark)}
+    .editor-content:empty::before{content:attr(data-placeholder);color:#ccc;pointer-events:none;display:block}
+    .editor-content h2{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;margin:1.5rem 0 0.8rem}
+    .editor-content blockquote{border-left:3px solid var(--earth);padding:0.5rem 1.5rem;margin:1.5rem 0;color:var(--text-muted);font-style:italic;font-family:'Playfair Display',serif;font-size:1.2rem}
+    .editor-content ul,.editor-content ol{padding-left:1.5rem;margin:0.8rem 0}
+    .editor-content img{max-width:100%;border-radius:4px;margin:1rem 0}
+    .word-count{margin-top:2rem;font-size:0.8rem;color:var(--text-muted);text-align:right;border-top:1px solid #e2e8f0;padding-top:0.8rem}
+
+    /* SIDEBAR */
+    .editor-sidebar{position:sticky;top:80px;display:flex;flex-direction:column;gap:1.5rem}
+    .sidebar-section{background:#fff;border:1.5px solid #e2e8f0;border-radius:4px;padding:1.5rem}
+    .sidebar-section h3{font-size:0.78rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--forest);margin-bottom:1rem}
+    .author-info{display:flex;align-items:center;gap:0.8rem}
+    .author-avatar{font-size:2rem}
+    .author-name{font-weight:600;font-size:0.9rem}
+    .sidebar-link{color:var(--rust);text-decoration:none;font-size:0.85rem}
+    .sidebar-field{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:1rem}
+    .sidebar-field label{font-size:0.75rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em}
+    .sidebar-field input,.sidebar-field select{padding:0.5rem 0.8rem;border:1.5px solid #e2e8f0;border-radius:2px;font-family:'DM Sans',sans-serif;font-size:0.9rem;outline:none;background:#fff;transition:var(--transition)}
+    .sidebar-field input:focus,.sidebar-field select:focus{border-color:var(--earth)}
+    .budget-btns{display:flex;gap:0.4rem;flex-wrap:wrap}
+    .budget-btn{padding:0.4rem 0.7rem;border:1.5px solid #e2e8f0;border-radius:50px;cursor:pointer;font-size:0.8rem;background:#fff;font-family:'DM Sans',sans-serif;transition:var(--transition)}
+    .budget-btn.active{border-color:var(--forest);background:var(--forest);color:var(--sand)}
+    .budget-btn:hover{border-color:var(--earth)}
+    .tips-list{list-style:none;display:flex;flex-direction:column;gap:0.6rem}
+    .tips-list li{font-size:0.82rem;color:var(--text-muted);padding-left:1rem;position:relative;line-height:1.5}
+    .tips-list li::before{content:'→';position:absolute;left:0;color:var(--rust)}
+    .preview-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1rem;color:var(--night)}
+    .preview-sub{font-size:0.82rem;color:var(--text-muted);margin-top:0.4rem}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(15,26,20,0.7);z-index:200;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+    .modal-overlay.open{display:flex}
+    .modal{background:var(--cream);border-radius:6px;padding:2.5rem;max-width:480px;width:90%;position:relative;animation:fadeUp 0.3s ease both}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;cursor:pointer;font-size:1.2rem;opacity:0.5}
+    .modal h2{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;margin-bottom:0.5rem}
+    .modal>p{color:var(--text-muted);margin-bottom:1.5rem}
+    .modal-check{display:flex;align-items:flex-start;gap:0.7rem;margin-bottom:0.8rem;font-size:0.9rem}
+    .modal-check input{margin-top:3px;accent-color:var(--rust)}
+    .modal .btn-primary{width:100%;padding:0.9rem;font-size:0.95rem;margin-top:1rem}
+    .modal-signin{display:block;text-align:center;margin-top:1rem;font-size:0.85rem;color:var(--rust);text-decoration:none}
+
+    @media(max-width:900px){
+      .editor-layout{grid-template-columns:1fr}
+      .editor-sidebar{position:static}
+    }
+    @media(max-width:600px){
+      .editor-tags-row{flex-direction:column}
+    }
+  </style>
+</head>
+<body>
+  <nav class="editor-nav">
+    <a href="index.html" class="nav-logo"><em>Explore</em></a>
+    <div class="editor-nav-right">
+      <button class="btn btn-secondary" id="saveDraft">Save Draft</button>
+      <button class="btn btn-primary" id="publishBtn">Publish Story →</button>
+    </div>
+  </nav>
+
+  <div class="editor-layout">
+    <main class="editor-main">
+      <div class="editor-cover" id="coverArea">
+        <img id="coverPreview" alt="Cover" />
+        <div class="cover-placeholder" id="coverPlaceholder">
+          <span>🖼️</span>
+          <p>Click to add a cover photo</p>
+          <input type="file" id="coverInput" accept="image/*" />
+        </div>
+      </div>
+
+      <div class="editor-body">
+        <div class="editor-tags-row">
+          <select id="categorySelect">
+            <option value="">Select a Category</option>
+            <option>🏝 Island</option><option>⛰️ Mountains</option><option>🏙 City</option>
+            <option>🧗 Adventure</option><option>🎭 Culture</option><option>🍜 Food</option><option>🏕️ Road Trip</option>
+          </select>
+          <input type="text" id="locationInput" placeholder="📍 Destination (e.g. Bali, Indonesia)" />
+        </div>
+        <input class="title-input" type="text" id="titleInput" placeholder="Your story title…" maxlength="100" />
+        <input class="subtitle-input" type="text" id="subtitleInput" placeholder="A one-line teaser that makes people want to read more…" />
+
+        <div class="editor-toolbar">
+          <button class="tool-btn" data-cmd="bold"><b>B</b></button>
+          <button class="tool-btn" data-cmd="italic"><i>I</i></button>
+          <button class="tool-btn" data-cmd="underline"><u>U</u></button>
+          <span class="tool-sep"></span>
+          <button class="tool-btn" data-cmd="insertUnorderedList">≡</button>
+          <button class="tool-btn" data-cmd="insertOrderedList">1.</button>
+          <span class="tool-sep"></span>
+          <button class="tool-btn" data-cmd="h2">H</button>
+          <button class="tool-btn" data-cmd="blockquote">❝</button>
+          <span class="tool-sep"></span>
+          <button class="tool-btn" id="insertImgBtn">🖼</button>
+          <button class="tool-btn" data-cmd="link">🔗</button>
+        </div>
+
+        <div class="editor-content" id="editorContent" contenteditable="true" data-placeholder="Start writing your story… Share what you saw, felt, tasted, discovered. The world is waiting to hear about it."></div>
+        <div class="word-count" id="wordCount">0 words</div>
+      </div>
+    </main>
+
+    <aside class="editor-sidebar">
+      <div class="sidebar-section">
+        <h3>✍️ Author</h3>
+        <div class="author-info">
+          <div class="author-avatar">👤</div>
+          <div><p class="author-name">Sign in to publish</p><a href="login.html" class="sidebar-link">Log in →</a></div>
+        </div>
+      </div>
+      <div class="sidebar-section">
+        <h3>📋 Story Details</h3>
+        <div class="sidebar-field"><label>Trip Duration</label><input type="text" placeholder="e.g. 7 days" /></div>
+        <div class="sidebar-field"><label>Best Season</label><select><option>Select season</option><option>Spring</option><option>Summer</option><option>Autumn</option><option>Winter</option><option>Year-round</option></select></div>
+        <div class="sidebar-field"><label>Budget Level</label>
+          <div class="budget-btns">
+            <button class="budget-btn" data-val="budget">💚 Budget</button>
+            <button class="budget-btn" data-val="mid">💛 Mid</button>
+            <button class="budget-btn" data-val="luxury">💎 Luxury</button>
+          </div>
+        </div>
+        <div class="sidebar-field"><label>Tags</label><input type="text" placeholder="e.g. solo, food, hiking" /></div>
+      </div>
+      <div class="sidebar-section">
+        <h3>🌍 Tips for Great Stories</h3>
+        <ul class="tips-list">
+          <li>Start with a scene that puts readers in the moment</li>
+          <li>Be specific: prices, times, transport</li>
+          <li>Include both the good and the challenging</li>
+          <li>Add photos to bring your story to life</li>
+          <li>End with your honest recommendation</li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h3>👁 Live Preview</h3>
+        <p id="previewTitle" class="preview-title">Your title will appear here</p>
+        <p id="previewSub" class="preview-sub"></p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="modal-overlay" id="publishModal">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">✕</button>
+      <h2>Ready to Publish? 🚀</h2>
+      <p>Your story will go live to 50,000+ travellers on Explore.</p>
+      <div class="modal-check"><input type="checkbox" id="confirmAccurate" /><label for="confirmAccurate">My story is accurate and based on personal experience</label></div>
+      <div class="modal-check"><input type="checkbox" id="confirmOriginal" /><label for="confirmOriginal">This is my original content</label></div>
+      <button class="btn btn-primary" id="confirmPublish">🌍 Publish My Story</button>
+      <a href="login.html" class="modal-signin">Need an account first? Sign up free →</a>
+    </div>
+  </div>
+
+  <script>
+    // Cover photo
+    const coverArea = document.getElementById('coverArea');
+    const coverInput = document.getElementById('coverInput');
+    const coverPreview = document.getElementById('coverPreview');
+    const coverPlaceholder = document.getElementById('coverPlaceholder');
+    coverArea.addEventListener('click', () => coverInput.click());
+    coverInput.addEventListener('change', e => {
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => { coverPreview.src=ev.target.result; coverPreview.style.display='block'; coverPlaceholder.style.display='none'; coverArea.style.border='none'; };
+      reader.readAsDataURL(file);
+    });
+
+    // Toolbar
+    document.querySelectorAll('.tool-btn[data-cmd]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cmd = btn.dataset.cmd;
+        if(cmd==='h2') document.execCommand('formatBlock',false,'h2');
+        else if(cmd==='blockquote') document.execCommand('formatBlock',false,'blockquote');
+        else if(cmd==='link'){const url=prompt('Enter URL:'); if(url) document.execCommand('createLink',false,url);}
+        else document.execCommand(cmd,false,null);
+        document.getElementById('editorContent').focus();
+      });
+    });
+
+    // Insert image
+    const insertImgBtn = document.getElementById('insertImgBtn');
+    const imgInput = document.createElement('input'); imgInput.type='file'; imgInput.accept='image/*'; imgInput.style.display='none'; document.body.appendChild(imgInput);
+    insertImgBtn.addEventListener('click', () => imgInput.click());
+    imgInput.addEventListener('change', e => {
+      const file = e.target.files[0]; if(!file) return;
+      const reader = new FileReader();
+      reader.onload = ev => { document.execCommand('insertImage',false,ev.target.result); };
+      reader.readAsDataURL(file);
+    });
+
+    // Word count
+    document.getElementById('editorContent').addEventListener('input', () => {
+      const words = document.getElementById('editorContent').innerText.trim().split(/\s+/).filter(w=>w).length;
+      document.getElementById('wordCount').textContent = words+' word'+(words!==1?'s':'');
+    });
+
+    // Live preview
+    document.getElementById('titleInput').addEventListener('input', function(){ document.getElementById('previewTitle').textContent=this.value||'Your title will appear here'; });
+    document.getElementById('subtitleInput').addEventListener('input', function(){ document.getElementById('previewSub').textContent=this.value; });
+
+    // Budget buttons
+    document.querySelectorAll('.budget-btn').forEach(btn => {
+      btn.addEventListener('click', () => { document.querySelectorAll('.budget-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); });
+    });
+
+    // Save draft
+    document.getElementById('saveDraft').addEventListener('click', function(){ this.textContent='✓ Draft saved'; setTimeout(()=>{this.textContent='Save Draft';},2000); });
+
+    // Publish modal
+    const publishModal = document.getElementById('publishModal');
+    document.getElementById('publishBtn').addEventListener('click', () => publishModal.classList.add('open'));
+    document.getElementById('modalClose').addEventListener('click', () => publishModal.classList.remove('open'));
+    publishModal.addEventListener('click', e => { if(e.target===publishModal) publishModal.classList.remove('open'); });
+    document.getElementById('confirmPublish').addEventListener('click', function(){
+      this.textContent='🚀 Published! Congratulations!'; this.style.background='#2ecc71';
+      setTimeout(()=>{ publishModal.classList.remove('open'); window.location.href='posts.html'; },1500);
+    });
+  </script>
+</body>
+</html>

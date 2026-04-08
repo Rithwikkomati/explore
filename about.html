@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Explore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --sand:#F5EDD6;--earth:#C8A96E;--rust:#C4522A;--forest:#2D4A3E;--night:#0F1A14;--mist:#E8EDE9;--gold:#D4A843;--cream:#FAF6EE;--text-dark:#1A1A1A;--text-muted:#6B7280;--transition:all 0.35s cubic-bezier(0.4,0,0.2,1); }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text-dark);overflow-x:hidden}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(15,26,20,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(212,168,67,0.15);transition:var(--transition)}
+    .nav-logo{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;font-style:italic;color:var(--gold);text-decoration:none}
+    .nav-links{display:flex;gap:2.5rem;list-style:none}
+    .nav-links a{color:var(--sand);text-decoration:none;font-size:0.9rem;font-weight:500;letter-spacing:0.08em;text-transform:uppercase;opacity:0.8;transition:var(--transition)}
+    .nav-links a:hover,.nav-links a.active{opacity:1;color:var(--gold)}
+    .nav-cta{background:var(--rust);color:#fff!important;padding:0.55rem 1.4rem;border-radius:2px;opacity:1!important}
+    .nav-cta:hover{background:var(--gold)!important;color:var(--night)!important}
+    .hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none}
+    .hamburger span{display:block;width:24px;height:2px;background:var(--sand)}
+    .btn{display:inline-block;padding:0.9rem 2.2rem;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;border-radius:2px;transition:var(--transition)}
+    .btn-primary{background:var(--rust);color:#fff}
+    .btn-primary:hover{background:var(--gold);color:var(--night);transform:translateY(-2px)}
+    .btn-dark{background:var(--forest);color:var(--sand)}
+    .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+    .text-center{text-align:center}
+    .section-eyebrow{font-size:0.75rem;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--rust);margin-bottom:0.75rem}
+    .section-title{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,3.5rem);font-weight:900;line-height:1.1;color:var(--night)}
+    .section-title em{font-style:italic;color:var(--earth)}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+    /* PAGE HERO */
+    .page-hero{position:relative;height:50vh;min-height:350px;display:flex;align-items:flex-end;padding-bottom:4rem;overflow:hidden}
+    .page-hero-bg{position:absolute;inset:0}
+    .page-hero-bg img{width:100%;height:100%;object-fit:cover}
+    .page-hero-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,26,20,0.9) 0%,rgba(15,26,20,0.4) 100%)}
+    .page-hero-content{position:relative;z-index:2;padding:0 4rem;animation:fadeUp 0.8s ease 0.2s both}
+
+    /* MISSION */
+    .mission{padding:7rem 0}
+    .mission-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+    .mission-text p{color:var(--text-muted);line-height:1.8;font-size:1.05rem;margin-top:1rem}
+    .mission-image{position:relative}
+    .mission-image img{width:100%;height:500px;object-fit:cover;border-radius:4px;display:block;box-shadow:20px 20px 0 var(--earth)}
+    .mission-badge{position:absolute;bottom:-1.5rem;left:-1.5rem;background:var(--forest);color:var(--sand);padding:1.2rem 1.8rem;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,0.2)}
+    .badge-num{display:block;font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:var(--gold)}
+    .badge-label{font-size:0.8rem;opacity:0.7;letter-spacing:0.08em}
+
+    /* VALUES */
+    .values{padding:7rem 0;background:linear-gradient(135deg,var(--night),var(--forest));color:var(--sand)}
+    .values .section-title{color:var(--sand);margin-bottom:4rem}
+    .values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+    .value-card{background:rgba(255,255,255,0.05);border:1px solid rgba(212,168,67,0.15);padding:2rem;border-radius:4px;transition:var(--transition);text-align:center}
+    .value-card:hover{background:rgba(255,255,255,0.08);transform:translateY(-4px)}
+    .value-icon{font-size:2.5rem;margin-bottom:1.2rem}
+    .value-card h3{font-family:'Playfair Display',serif;font-size:1.15rem;color:var(--gold);margin-bottom:0.7rem}
+    .value-card p{opacity:0.65;font-size:0.9rem;line-height:1.7}
+
+    /* TEAM */
+    .team{padding:7rem 0;background:var(--cream)}
+    .team .section-title{margin-bottom:3rem}
+    .team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem}
+    .team-card{text-align:center;padding:2rem 1rem;background:#fff;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,0.06);transition:var(--transition)}
+    .team-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,0.1)}
+    .team-photo{width:100px;height:100px;border-radius:50%;overflow:hidden;margin:0 auto 1.2rem;border:3px solid var(--earth)}
+    .team-photo img{width:100%;height:100%;object-fit:cover}
+    .team-card h3{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin-bottom:0.3rem}
+    .team-role{display:block;font-size:0.75rem;color:var(--rust);font-weight:600;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.8rem}
+    .team-card p{font-size:0.88rem;color:var(--text-muted);line-height:1.6}
+
+    /* STATS */
+    .stats-strip{background:var(--rust);padding:4rem 0}
+    .stats-inner{display:flex;justify-content:space-around;flex-wrap:wrap;gap:2rem;max-width:1200px;margin:0 auto;padding:0 2rem}
+    .big-stat{text-align:center;color:#fff}
+    .big-num{display:block;font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:900;color:var(--sand);line-height:1}
+    .big-stat span{font-size:0.85rem;opacity:0.8;letter-spacing:0.08em;text-transform:uppercase}
+
+    /* FOOTER */
+    footer{background:var(--night);color:var(--sand);padding:4rem}
+    .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+    .footer-brand p{opacity:0.6;font-size:0.9rem;line-height:1.7;max-width:260px;margin-top:0.8rem}
+    .footer-col h4{font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:1.2rem}
+    .footer-col ul{list-style:none}
+    .footer-col ul li{margin-bottom:0.6rem}
+    .footer-col ul li a{color:var(--sand);text-decoration:none;opacity:0.6;font-size:0.9rem;transition:var(--transition)}
+    .footer-col ul li a:hover{opacity:1;color:var(--earth)}
+    .footer-bottom{border-top:1px solid rgba(245,237,214,0.1);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;opacity:0.5;font-size:0.85rem}
+
+    @media(max-width:900px){
+      nav{padding:1rem 1.5rem}
+      .nav-links{display:none;position:fixed;top:65px;left:0;right:0;background:var(--night);flex-direction:column;padding:2rem;gap:1.5rem}
+      .nav-links.open{display:flex}
+      .hamburger{display:flex}
+      .mission-grid{grid-template-columns:1fr}
+      .values-grid{grid-template-columns:1fr 1fr}
+      .team-grid{grid-template-columns:1fr 1fr}
+      .page-hero-content{padding:0 1.5rem}
+      .footer-grid{grid-template-columns:1fr 1fr}
+      footer{padding:2rem}
+    }
+    @media(max-width:600px){
+      .values-grid,.team-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <nav id="navbar">
+    <a href="index.html" class="nav-logo"><em>Explore</em></a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="destinations.html">Destinations</a></li>
+      <li><a href="posts.html">Stories</a></li>
+      <li><a href="about.html" class="active">About</a></li>
+      <li><a href="login.html" class="nav-cta">Sign In</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+  </nav>
+
+  <section class="page-hero">
+    <div class="page-hero-bg">
+      <img src="https://images.unsplash.com/photo-1488085061387-422e29b40080?w=1600&q=80" alt="Travel" />
+      <div class="page-hero-overlay"></div>
+    </div>
+    <div class="page-hero-content">
+      <p class="section-eyebrow" style="color:var(--gold)">Our Story</p>
+      <h1 class="section-title" style="color:#fff">We Believe Every Place<br/><em>Has a Story</em></h1>
+    </div>
+  </section>
+
+  <section class="mission">
+    <div class="container mission-grid">
+      <div class="mission-text">
+        <p class="section-eyebrow">Who We Are</p>
+        <h2 class="section-title">Guides Who <em>Actually Go</em> There</h2>
+        <p>Explore was born in 2020 from a single frustration: travel content written by people who had never been to the places they described. We set out to change that.</p>
+        <p>We're a community of real travellers — backpackers, photographers, foodies, and adventure-seekers — who believe honest, firsthand experience is the only guide worth trusting.</p>
+        <p>From the rooftops of Rajasthan to the fjords of Norway, every place on Explore has been visited, verified, and loved.</p>
+        <a href="signup.html" class="btn btn-primary" style="margin-top:2rem">Join Our Community</a>
+      </div>
+      <div class="mission-image">
+        <img src="https://images.unsplash.com/photo-1522199710521-72d69614c702?w=700&q=80" alt="Travellers" />
+        <div class="mission-badge"><span class="badge-num">2020</span><span class="badge-label">Est. by wanderers</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="values">
+    <div class="container">
+      <p class="section-eyebrow text-center">What Drives Us</p>
+      <h2 class="section-title text-center">Our <em>Values</em></h2>
+      <div class="values-grid">
+        <div class="value-card"><div class="value-icon">🌍</div><h3>Authentic First</h3><p>Every destination guide is written by someone who has genuinely visited. No sponsored fluff, no copy-paste content.</p></div>
+        <div class="value-card"><div class="value-icon">🤝</div><h3>Community-Powered</h3><p>Our best content comes from our community. Every story shared helps another traveller find their perfect adventure.</p></div>
+        <div class="value-card"><div class="value-icon">🌱</div><h3>Responsible Travel</h3><p>We champion sustainable tourism, local economies, and leaving every place better than we found it.</p></div>
+        <div class="value-card"><div class="value-icon">🔓</div><h3>Always Free</h3><p>Great travel guides should be accessible to everyone, regardless of budget or background.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="team">
+    <div class="container">
+      <p class="section-eyebrow text-center">Meet the Team</p>
+      <h2 class="section-title text-center">The People <em>Behind the Map</em></h2>
+      <div class="team-grid">
+        <div class="team-card"><div class="team-photo"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80" alt="Priya" /></div><h3>Priya Nair</h3><span class="team-role">Co-Founder & Editor</span><p>45 countries, 0 regrets. Priya has been travelling solo since she was 22.</p></div>
+        <div class="team-card"><div class="team-photo"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80" alt="Marcus" /></div><h3>Marcus Velo</h3><span class="team-role">Co-Founder & Tech Lead</span><p>Built Explore from a hostel in Lisbon. Loves motorcycles, mountain passes, and bad coffee.</p></div>
+        <div class="team-card"><div class="team-photo"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=400&q=80" alt="Aiko" /></div><h3>Aiko Tanaka</h3><span class="team-role">Head of Destinations</span><p>Specialises in Asia-Pacific travel. Has eaten her way through 12 countries and counting.</p></div>
+        <div class="team-card"><div class="team-photo"><img src="https://images.unsplash.com/photo-1552058544-f2b08422138a?w=400&q=80" alt="Kofi" /></div><h3>Kofi Asante</h3><span class="team-role">Africa & Middle East Guide</span><p>From Cape Town to Cairo — Kofi's mission is to show the world the Africa tourists never see.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-strip">
+    <div class="stats-inner">
+      <div class="big-stat"><span class="big-num">120+</span><span>Countries Covered</span></div>
+      <div class="big-stat"><span class="big-num">3,400+</span><span>Community Stories</span></div>
+      <div class="big-stat"><span class="big-num">50K</span><span>Active Explorers</span></div>
+      <div class="big-stat"><span class="big-num">6</span><span>Continents Explored</span></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand"><a href="index.html" class="nav-logo"><em>Explore</em></a><p>Your guide to the world's most extraordinary places.</p></div>
+      <div class="footer-col"><h4>Navigate</h4><ul><li><a href="index.html">Home</a></li><li><a href="destinations.html">Destinations</a></li><li><a href="posts.html">Stories</a></li><li><a href="about.html">About</a></li></ul></div>
+      <div class="footer-col"><h4>Account</h4><ul><li><a href="login.html">Sign In</a></li><li><a href="signup.html">Create Account</a></li><li><a href="post-editor.html">Write a Story</a></li></ul></div>
+      <div class="footer-col"><h4>Regions</h4><ul><li><a href="#">Asia</a></li><li><a href="#">Europe</a></li><li><a href="#">Americas</a></li><li><a href="#">Africa</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><span>© 2026 Explore. All rights reserved.</span><span>Made with ❤️ for wanderers</span></div>
+  </footer>
+
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('navLinks');
+    if (hamburger) hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar').style.background = window.scrollY > 60 ? 'rgba(15,26,20,0.98)' : 'rgba(15,26,20,0.92)';
+    });
+  </script>
+</body>
+</html>
